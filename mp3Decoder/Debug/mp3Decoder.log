@@ -1,0 +1,31 @@
+﻿  mp3dec.c
+  mp3tabs.c
+  bitstream.c
+  buffers.c
+  dct32.c
+  dequant.c
+  dqchan.c
+  huffman.c
+  hufftabs.c
+  imdct.c
+  polyphase.c
+  scalfact.c
+  stproc.c
+  subband.c
+  trigtabs_fixpt.c
+  read_id3.c
+C:\Users\Usuario\source\repos\mp3Decoder\id3\read_id3.c(30,1): warning C4005: 'min': macro redefinition
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\stdlib.h(1290): message : see previous definition of 'min'
+C:\Users\Usuario\source\repos\mp3Decoder\id3\read_id3.c(65,20): warning C4018: '<': signed/unsigned mismatch
+  main.c
+C:\Users\Usuario\source\repos\mp3Decoder\main.c(97,28): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Usuario\source\repos\mp3Decoder\main.c(42,11): warning C4101: 'wavIn': unreferenced local variable
+C:\Users\Usuario\source\repos\mp3Decoder\main.c(42,19): warning C4101: 'wavOut': unreferenced local variable
+  wav.c
+  mp3decoder.c
+C:\Users\Usuario\source\repos\mp3Decoder\mp3Decoder\mp3decoder.c(17,1): warning C4005: '_CRT_SECURE_NO_WARNINGS': macro redefinition
+C:\Users\Usuario\source\repos\mp3Decoder\mp3Decoder\mp3decoder.c : message : see previous definition of '_CRT_SECURE_NO_WARNINGS'
+C:\Users\Usuario\source\repos\mp3Decoder\mp3Decoder\mp3decoder.c(441,70): warning C4267: '=': conversion from 'size_t' to 'uint16_t', possible loss of data
+C:\Users\Usuario\source\repos\mp3Decoder\mp3Decoder\mp3decoder.c(569,21): warning C4101: 'read': unreferenced local variable
+  Generating Code...
+  mp3Decoder.vcxproj -> C:\Users\Usuario\source\repos\mp3Decoder\Debug\mp3Decoder.exe
