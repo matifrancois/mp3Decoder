@@ -66,10 +66,10 @@
     <ClCompile Include="..\id3\read_id3.c">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="decoder.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="decoder.cpp">
+    <ClCompile Include="main.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

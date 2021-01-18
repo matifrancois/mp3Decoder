@@ -156,8 +156,8 @@
     <ClCompile Include="..\helix\real\trigtabs_fixpt.c" />
     <ClCompile Include="..\id3\read_id3.c" />
     <ClCompile Include="..\wav.c" />
-    <ClCompile Include="decoder.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="decoder.c" />
+    <ClCompile Include="main.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\helix\platform.h" />

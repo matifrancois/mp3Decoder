@@ -45,7 +45,7 @@
  *  					VARIABLES WITH LOCAL SCOPE
  *****************************************************************************/
 
-static short buffer[MP3_DECODED_BUFFER_SIZE];
+static short buffer[DECODED_BUFFER_SIZE];
 
 
 /*******************************************************************************
@@ -61,16 +61,16 @@ int main(void)
 	uint32_t sr = 0;
 	uint8_t j = 0;
 	WavFile * wav_file;
-	mp3decoder_frame_data_t frameData;
-	mp3decoder_tag_data_t ID3Data;
+	decoder_data_t frameData;
+	/*mp3decoder_t ID3Data;*/
 
 	// initialize the wav part of the program
-	#ifndef SAMPLE
+	//#ifndef SAMPLE
 	wav_file = wav_open(FILEPATH_WAV, "wb");
 	wav_set_format(wav_file, SAMPLE_FORMAT);
 	wav_set_sample_rate(wav_file, SAMPLE_RATE);
 	wav_set_num_channels(wav_file, 1);
-	#endif // SAMPLE
+	//#endif // SAMPLE
 
 	//	#ifdef SAMPLE
 	//	// Open read and write file
@@ -80,53 +80,33 @@ int main(void)
 	//	wav_set_format(wavOut, SAMPLE_FORMAT);
 	//	#endif
 
-	#ifndef SAMPLE
 	MP3DecoderInit();
 
 	if (MP3LoadFile(FILEPATH))
 	{
-
 		int i = 0;
-		while (1)
+		while(1)
 		{
-			#ifdef MAIN_DEBUG
-			printf("\n[APP] Frame %d decoding started.\n", i);
-			#endif
-			mp3decoder_result_t res = MP3GetDecodedFrame(buffer, MP3_DECODED_BUFFER_SIZE, &sampleCount);
-			if (res == 0)
+			decoder_return_t check = MP3GetDecodedFrame(buffer, DECODED_BUFFER_SIZE, &sampleCount, 0);
+			if (check == 0)
 			{
 				MP3GetLastFrameData(&frameData);
-				if (sr != frameData.sampleRate)
-				{
-					int huevo = 0;
-					huevo++;
-				}
-				#ifdef MAIN_DEBUG
-				printf("[APP] Frame %d decoded.\n", i);
-				#endif
 				i++;
-				if (i == 4)
-				{
-					i++;
-					i--;
-				}
 				sr = frameData.sampleRate;
-				#ifdef MAIN_DEBUG
 				printf("[APP] FRAME SAMPLE RATE: %d \n", sr);
-				#endif
 
-				int16_t auxBuffer[MP3_DECODED_BUFFER_SIZE];
-				for (uint32_t j = 0; j < sampleCount / frameData.channelCount; j++)
+				int16_t auxBuffer[DECODED_BUFFER_SIZE];
+				for (uint32_t j = 0; j < (sampleCount / frameData.channelCount); j++)
 				{
 					auxBuffer[j] = buffer[frameData.channelCount * j];
 				}
 				wav_write(wav_file, auxBuffer, sampleCount / frameData.channelCount);
 			}
-			else if (res == MP3DECODER_FILE_END)
+			else if (check == DECODER_END_OF_FILE)
 			{
 				printf("[APP] FILE ENDED. Decoded %d frames.\n", i - 1);
 				wav_close(wav_file);
-				if (MP3GetTagData(&ID3Data))
+				/*if (MP3GetTagData(&ID3Data))
 				{
 					printf("\nSONG INFO\n");
 					printf("TITLE: %s\n", ID3Data.title);
@@ -134,13 +114,8 @@ int main(void)
 					printf("ALBUM: %s\n", ID3Data.album);
 					printf("TRACK NUM: %s\n", ID3Data.trackNum);
 					printf("YEAR: %s\n", ID3Data.year);
-				}
+				}*/
 				break;
-			}
-			else
-			{
-				int huevo = 0;
-				huevo++;
 			}
 		}
 	}
@@ -148,7 +123,6 @@ int main(void)
 	{
 		printf("Couldnt open file\n");
 	}
-	#endif
 
 	//	#ifdef SAMPLE
 	//	uint16_t readBytes;
