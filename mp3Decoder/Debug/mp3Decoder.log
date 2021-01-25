@@ -1,4 +1,9 @@
 ﻿  decoder.c
-C:\Users\Usuario\source\repos\mp3Decoder\mp3Decoder\decoder.c(182,71): warning C4267: '=': conversion from 'size_t' to 'uint16_t', possible loss of data
-C:\Users\Usuario\source\repos\mp3Decoder\mp3Decoder\decoder.c(257,71): warning C4267: '=': conversion from 'size_t' to 'uint16_t', possible loss of data
+C:\Users\Usuario\source\repos\mp3Decoder\mp3Decoder\decoder.c(70,39): warning C4028: formal parameter 1 different from declaration
+C:\Users\Usuario\source\repos\mp3Decoder\mp3Decoder\decoder.c(120,91): warning C4133: 'function': incompatible types - from 'int *' to 'short *'
+C:\Users\Usuario\source\repos\mp3Decoder\mp3Decoder\decoder.c(189,71): warning C4267: '=': conversion from 'size_t' to 'uint16_t', possible loss of data
+C:\Users\Usuario\source\repos\mp3Decoder\mp3Decoder\decoder.c(267,71): warning C4267: '=': conversion from 'size_t' to 'uint16_t', possible loss of data
+  main.c
+C:\Users\Usuario\source\repos\mp3Decoder\mp3Decoder\main.c(94,36): warning C4018: '<': signed/unsigned mismatch
+  Generating Code...
   mp3Decoder.vcxproj -> C:\Users\Usuario\source\repos\mp3Decoder\Debug\mp3Decoder.exe

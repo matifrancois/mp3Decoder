@@ -6,7 +6,7 @@
 #include <string.h>
 
 
-#define DECODED_BUFFER_SIZE (4*1152)  
+#define DECODED_BUFFER_SIZE 4608  
 
 
 typedef enum
@@ -28,14 +28,16 @@ typedef struct
 } decoder_data_t;
 
 
-
+/*
+* @brief Initialize the values inside the decoder_t decoder struct
+*/
 void MP3DecoderInit(void);
 
 bool MP3LoadFile(const char* filename);
 
 bool MP3GetLastFrameData(decoder_data_t* data);
 
-decoder_return_t MP3GetDecodedFrame(short* outBuffer, uint16_t bufferSize, uint16_t* Decodedsamples, uint8_t depth);
+decoder_return_t MP3DecodedFrame(short* outBuffer, uint16_t bufferSize, uint16_t* Decodedsamples, uint8_t depth);
 
 
 #endif /* _MP3DECODER_H_ */
