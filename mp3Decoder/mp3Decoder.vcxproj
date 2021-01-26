@@ -155,8 +155,9 @@
     <ClCompile Include="..\helix\real\subband.c" />
     <ClCompile Include="..\helix\real\trigtabs_fixpt.c" />
     <ClCompile Include="..\id3\read_id3.c" />
-    <ClCompile Include="..\wav.c" />
+    <ClCompile Include="..\wav\wav.c" />
     <ClCompile Include="decoder.c" />
+    <ClCompile Include="loading.c" />
     <ClCompile Include="main.c" />
   </ItemGroup>
   <ItemGroup>
@@ -167,8 +168,9 @@
     <ClInclude Include="..\helix\pub\statname.h" />
     <ClInclude Include="..\helix\real\coder.h" />
     <ClInclude Include="..\id3\read_id3.h" />
-    <ClInclude Include="..\wav.h" />
+    <ClInclude Include="..\wav\wav.h" />
     <ClInclude Include="decoder.h" />
+    <ClInclude Include="loading.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

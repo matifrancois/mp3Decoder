@@ -10,7 +10,7 @@
 
 #include <stdint.h>
 #include <stdio.h>
-#include "../wav.h"
+#include "../wav/wav.h"
 #include "../mp3Decoder/decoder.h"
 
 
@@ -18,34 +18,45 @@
  *					CONSTANT AND MACRO DEFINITIONS USING #DEFINE
  ******************************************************************************/
 
-//#define HAYDN
-#define ODA_A_LA_ALEGRIA
 
 #define SAMPLE_FORMAT WAV_FORMAT_PCM
+ 
+//here uncomment the others posibilities and select the right song
+
+//#define HAYDN
+//#define ODA_A_LA_ALEGRIA
+#define QUEEN
+//#define YOUR_SONG
+
+
+// Here put the path of the song that you want to decode
+
+//#ifdef YOUR_SONG
+//#define FILEPATH		"C:/The/filepath/of/your/song.mp3"
+//#define FILEPATH_WAV	"C:/The/filepath/of/your/decoded/song.wav"
+//#endif
 
 #ifdef HAYDN
 #define FILEPATH		"C:/Users/Usuario/Documents/ITBA/Haydn_Cello_Concerto_D-1.mp3"
 #define FILEPATH_WAV	"C:/Users/Usuario/Documents/ITBA/Haydn_Cello_Concerto_D-1.wav"
-#define SAMPLE_RATE		11025
 #endif
 
 #ifdef ODA_A_LA_ALEGRIA
 #define FILEPATH		"C:/Users/Usuario/Documents/ITBA/Oda-a-la-alegria.mp3"
 #define FILEPATH_WAV	"C:/Users/Usuario/Documents/ITBA/Oda-a-la-alegria.wav"
-#define SAMPLE_RATE		44100
 #endif
 
-////#define NUM_CHANNELS	1
+#ifdef QUEEN
+#define FILEPATH		"C:/Users/Usuario/Documents/ITBA/Music/i_want_to_break_free.mp3"
+#define FILEPATH_WAV	"C:/Users/Usuario/Documents/ITBA/Music/i_want_to_break_free.wav"
+#endif
 
-/*******************************************************************************
-*		FUNCTION PROTOTYPES FOR PRIVATE FUNCTIONS WITH FILE LEVEL SCOPE
-******************************************************************************/
+
 /*****************************************************************************
  *  					VARIABLES WITH LOCAL SCOPE
  *****************************************************************************/
 
 static short buffer[DECODED_BUFFER_SIZE];
-
 
 /*******************************************************************************
 *                       LOCAL FUNCTION DEFINITIONS
@@ -60,12 +71,11 @@ int main(void)
 	uint16_t sampleRate = 0;
 	decoder_data_t frameData;
 	WavFile* wav_file;
-	//mp3decoder_t ID3Data;
+	decoder_tag_t ID3Data;
 
 	//! initialize the wav part of the program
 	wav_file = wav_open(FILEPATH_WAV, "wb");
 	wav_set_format(wav_file, SAMPLE_FORMAT);
-	wav_set_sample_rate(wav_file, SAMPLE_RATE);
 	wav_set_num_channels(wav_file, 1);
 
 	//! we initializate the data to use the decoder.
@@ -74,20 +84,48 @@ int main(void)
 	//! if we can open the mp3 file
 	if (MP3LoadFile(FILEPATH))
 	{
+		//! we show the info of the song
+		if (MP3GetTagData(&ID3Data))
+		{
+			printf("\n  SONG INFO\n");
+			printf("TITLE: %s\n", ID3Data.title);
+			printf("ARTIST: %s\n", ID3Data.artist);
+			printf("ALBUM: %s\n", ID3Data.album);
+			printf("TRACK NUMBER: %s\n", ID3Data.trackNum);
+			printf("YEAR: %s\n \n", ID3Data.year);
+		}
 		//! variable frames to count the number of frames decoded
 		int frames = 0;
+		int reference = 0;
+		//! we just print the size of the file
+		printSize();
+		//! ref is to go inside an if inside the while just one time.
+		bool ref = false;
 		while(true)
 		{
 			//! with this function we update the sampleCount number
-			decoder_return_t check = MP3DecodedFrame(buffer, DECODED_BUFFER_SIZE, &sampleCount, 0);
+			decoder_return_t check = MP3DecodedFrame(buffer, DECODED_BUFFER_SIZE, &sampleCount);
 			if (check == DECODER_WORKED)
 			{
 				//! if there are a last frame get the data
 				MP3GetLastFrameData(&frameData);
 				//! we update the number of frames decoded
+				
+				if (ref == false) {
+					//! we inform the sample count
+					printf("sample count: %d \n\n", sampleCount);
+					//! configutates the wav_file to the right sampleRate according to the information inside the mp3 file.
+					//! we do it statement here because we need to know the sample rate and we know that after using the MP3GetLastFrameData function
+					wav_set_sample_rate(wav_file, frameData.sampleRate);
+					//! set ref in true to not go back here never ever, you are banished from the kingdom of this if
+					ref = true;
+				}
+
+				//! create and update the loading bar with the percentaje completed.
+				printPercentage();
+
+				//! update the counter to share the number of frames decoded at the end of the program
 				frames++;
-				////sampleRate = frameData.sampleRate;
-				////printf("FRAME SAMPLE RATE: %d \n", sampleRate);
 
 				int16_t auxBuffer[DECODED_BUFFER_SIZE];
 				for (uint32_t index = 0; index < (sampleCount / frameData.channelCount); index++)
@@ -98,17 +136,9 @@ int main(void)
 			}
 			else if (check == DECODER_END_OF_FILE)
 			{
-				printf("[APP] FILE ENDED. Decoded %d frames.\n", frames - 1);
+				print100Percentage();
+				printf("\n\nFILE ENDED. Decoded %d frames.\n", frames - 1);
 				wav_close(wav_file);
-				/*if (MP3GetTagData(&ID3Data))
-				{
-					printf("\nSONG INFO\n");
-					printf("TITLE: %s\n", ID3Data.title);
-					printf("ARTIST: %s\n", ID3Data.artist);
-					printf("ALBUM: %s\n", ID3Data.album);
-					printf("TRACK NUM: %s\n", ID3Data.trackNum);
-					printf("YEAR: %s\n", ID3Data.year);
-				}*/
 				break;
 			}
 		}
@@ -118,25 +148,5 @@ int main(void)
 		//! if you are here the mp3 file couldnt be open
 		printf("Couldnt open file\n");
 	}
-
-	////	#ifdef SAMPLE
-	////	uint16_t readBytes;
-
-	////	// Read and write files
-	////	while (!wav_eof(wavIn))
-	////	{
-	////		static int i = 0;
-	////		i++;
-	////		readBytes = wav_read(wavIn, readBuffer, BLOCK_SIZE);
-	////		if (readBytes == 0)
-	////		{
-	////			i++;
-	////		}
-	////		wav_write(wavOut, readBuffer, readBytes);
-	////	}
-	////	wav_close(wavOut);
-	////	wav_close(wavIn);
-	////	#endif
-
 	return 0;
 }
