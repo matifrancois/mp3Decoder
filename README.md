@@ -30,8 +30,6 @@ In the main.c file you can find this code:
 ```
 // Here comment the others posibilities and uncomment the right song
 
-//#define HAYDN
-//#define ODA_A_LA_ALEGRIA
 #define QUEEN
 //#define YOUR_SONG
 
@@ -40,7 +38,7 @@ In the main.c file you can find this code:
 
 //#ifdef YOUR_SONG
 //#define FILEPATH		"C:/The/filepath/of/your/song.mp3"
-//#define FILEPATH_WAV	"C:/The/filepath/of/your/decoded/song.wav"
+//#define FILEPATH_WAV	"C:/The/filepath/of/your/decoded_song.wav"
 //#endif
 ```
 
